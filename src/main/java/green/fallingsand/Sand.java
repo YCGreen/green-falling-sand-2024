@@ -1,8 +1,8 @@
 package green.fallingsand;
 
 public class Sand {
-    private int fieldX = 3;
-    private int fieldY = 3;
+    private static final int fieldX = 3;
+    private static final int fieldY = 3;
     private int[][] field = new int[fieldX][fieldY];
 
     /**
@@ -25,23 +25,12 @@ public class Sand {
     public void fall() {
         for(int y = 0; y < fieldY; y++) {
             for(int x = 0; x < fieldX; x++) {
-                if(field[y][x] == 1) {
-                    boolean atBottom;
-                    do {
-                        atBottom = fallSingular(x, y);
-                    } while (!atBottom);
+                if(field[y][x] == 1 && y < fieldY - 1 && field[y + 1][x] == 0){
+                    field[y+1][x] = 1;
+                    field[y][x] = 0;
                 }
             }
         }
-    }
-
-    public boolean fallSingular(int x, int y) {
-        boolean isBottom = true;
-        if(y < fieldY - 1 && field[y + 1][x] == 0){
-            field[x][y+1] = 1;
-            isBottom = false;
-        }
-        return isBottom;
     }
 
     @Override
