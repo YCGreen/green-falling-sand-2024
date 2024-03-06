@@ -23,10 +23,10 @@ public class Sand {
      * Moves all sand down one square
      */
     public void fall() {
-        for(int y = 0; y < fieldY; y++) {
-            for(int x = 0; x < fieldX; x++) {
-                if(field[y][x] == 1 && y < fieldY - 1 && field[y + 1][x] == 0){
-                    field[y+1][x] = 1;
+        for (int y = 0; y < fieldY; y++)  {
+            for (int x = 0; x < fieldX; x++)  {
+                if (field[y][x] == 1 && y < fieldY - 1 && field[y + 1][x] == 0){
+                    field[y + 1][x] = 1;
                     field[y][x] = 0;
                 }
             }
