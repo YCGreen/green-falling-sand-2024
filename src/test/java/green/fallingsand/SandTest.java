@@ -75,8 +75,8 @@ class SandTest {
     public void fallSimultaneously() {
         //given
         Sand sand = new Sand();
-        sand.put(1,0);
-        sand.put(1,1);
+        sand.put(1, 0);
+        sand.put(1, 1);
 
         //when
         sand.fall();
