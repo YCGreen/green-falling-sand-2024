@@ -1,9 +1,11 @@
 package green.fallingsand;
 
 public class Sand {
-    private static final int fieldX = 3;
-    private static final int fieldY = 3;
-    private int[][] field = new int[fieldX][fieldY];
+    private int[][] field;
+
+    public void setField(int x, int y) {
+        field = new int[y][x];
+    }
 
     /**
      * @return the value in field
@@ -23,9 +25,9 @@ public class Sand {
      * Moves all sand down one square
      */
     public void fall() {
-        for (int y = fieldY - 1; y >= 0; y--) {
-            for (int x = fieldX - 1; x >= 0; x--)  {
-                if (field[y][x] == 1 && y < fieldY - 1 && field[y + 1][x] == 0) {
+        for (int y = field.length - 2; y >= 0; y--) {
+            for (int x = field[y].length - 1; x >= 0; x--) {
+                if (field[y][x] == 1 && field[y + 1][x] == 0) {
                     field[y + 1][x] = 1;
                     field[y][x] = 0;
                 }
@@ -37,8 +39,8 @@ public class Sand {
     public String toString() {
         StringBuilder builder = new StringBuilder();
 
-        for (int y = 0; y < fieldY; y++) {
-            for (int x = 0; x < fieldX; x++) {
+        for (int y = 0; y < field.length; y++) {
+            for (int x = 0; x < field[y].length; x++) {
                 builder.append(field[y][x]);
             }
             builder.append("\n");
