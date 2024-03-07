@@ -4,10 +4,15 @@ import java.util.Random;
 
 public class Sand {
     private final int[][] field;
-    private final Random random = new Random();
+    private Random random = new Random();
 
     public Sand(int width, int height) {
         field = new int[height][width];
+    }
+
+    public Sand(int width, int height, Random random) {
+        field = new int[height][width];
+        this.random = random;
     }
 
     /**
@@ -36,16 +41,25 @@ public class Sand {
                     if (field[y + 1][x] == 0) {
                         field[y + 1][x] = 1;
                         field[y][x] = 0;
+                        continue;
                     }
-                    //does sand fall to right
-                    else if (field[y + 1][x + 1] == 0) {
-                        field[y + 1][x + 1] = 1;
-                        field[y][x] = 0;
-                    }
-                    //does sand fall to left
-                    else if (field[y + 1][x - 1] == 0) {
-                        field[y + 1][x - 1] = 1;
-                        field[y][x] = 0;
+
+                    if (random.nextBoolean()) {
+                        if (field[y + 1][x + 1] == 0) { //right
+                            field[y + 1][x + 1] = 1;
+                            field[y][x] = 0;
+                        } else if (field[y + 1][x - 1] == 0) { //left
+                            field[y + 1][x - 1] = 1;
+                            field[y][x] = 0;
+                        }
+                    } else {
+                        if (field[y + 1][x - 1] == 0) { //left
+                            field[y + 1][x - 1] = 1;
+                            field[y][x] = 0;
+                        } else if (field[y + 1][x + 1] == 0) { //right
+                            field[y + 1][x + 1] = 1;
+                            field[y][x] = 0;
+                        }
                     }
                 }
             }
