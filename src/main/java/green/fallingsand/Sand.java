@@ -43,24 +43,18 @@ public class Sand {
                         field[y][x] = 0;
                         continue;
                     }
+                    boolean rightFirst = random.nextBoolean();
+                    int direction1 = rightFirst ? 1 : -1;
+                    int direction2 = rightFirst ? -1 : 1;
 
-                    if (random.nextBoolean()) {
-                        if (field[y + 1][x + 1] == 0) { //right
-                            field[y + 1][x + 1] = 1;
-                            field[y][x] = 0;
-                        } else if (field[y + 1][x - 1] == 0) { //left
-                            field[y + 1][x - 1] = 1;
-                            field[y][x] = 0;
-                        }
-                    } else {
-                        if (field[y + 1][x - 1] == 0) { //left
-                            field[y + 1][x - 1] = 1;
-                            field[y][x] = 0;
-                        } else if (field[y + 1][x + 1] == 0) { //right
-                            field[y + 1][x + 1] = 1;
-                            field[y][x] = 0;
-                        }
+                    if (field[y + 1][x + direction1] == 0) { //right
+                        field[y + 1][x + direction1] = 1;
+                        field[y][x] = 0;
+                    } else if (field[y + 1][x + direction2] == 0) { //left
+                        field[y + 1][x + direction2] = 1;
+                        field[y][x] = 0;
                     }
+
                 }
             }
         }
