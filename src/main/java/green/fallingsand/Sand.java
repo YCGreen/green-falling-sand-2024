@@ -3,7 +3,7 @@ package green.fallingsand;
 public class Sand {
     private int[][] field;
 
-    public void setField(int x, int y) {
+    public Sand(int x, int y) {
         field = new int[y][x];
     }
 
