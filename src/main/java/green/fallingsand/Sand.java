@@ -10,6 +10,7 @@ public class Sand {
         field = new int[height][width];
     }
 
+    //for purposes of mockitoing
     public Sand(int width, int height, Random random) {
         field = new int[height][width];
         this.random = random;
@@ -34,29 +35,43 @@ public class Sand {
      */
     public void fall() {
         for (int y = field.length - 2; y >= 0; y--) {
-            for (int x = field[y].length - 1; x >= 0; x--) {
+            for (int x = 0; x < field[y].length; x++) {
 
-                if (field[y][x] == 1) {
-                    //check if sand should fall straight down
+                if (field[y][x] == 1) { //straight
                     if (field[y + 1][x] == 0) {
-                        field[y + 1][x] = 1;
-                        field[y][x] = 0;
+                        fallDirection(y, x, 0);
                         continue;
                     }
-                    boolean rightFirst = random.nextBoolean();
-                    int direction1 = rightFirst ? 1 : -1;
-                    int direction2 = rightFirst ? -1 : 1;
 
-                    if (field[y + 1][x + direction1] == 0) { //right
-                        field[y + 1][x + direction1] = 1;
-                        field[y][x] = 0;
-                    } else if (field[y + 1][x + direction2] == 0) { //left
-                        field[y + 1][x + direction2] = 1;
-                        field[y][x] = 0;
+                    boolean rightFirst = random.nextBoolean();
+                    int direction = rightFirst ? 1 : -1;
+
+                    if (field[y + 1][x + direction] == 0) { //right
+                        fallDirection(y, x, direction);
+                    } else if (field[y + 1][x - direction] == 0) { //left
+                        fallDirection(y, x, -direction);
                     }
 
                 }
             }
+        }
+    }
+
+    private void fallDirection(int y, int x, int direction) {
+        field[y + 1][x + direction] = 1;
+        field[y][x] = 0;
+    }
+
+    public void randomSand(int n) {
+        for (int i = 0; i < n; i++) {
+            int y, x;
+            do {
+                y = random.nextInt(field.length);
+                x = random.nextInt(field[0].length);
+            }
+            while (field[y][x] == 1);
+
+            field[y][x] = 1;
         }
     }
 
