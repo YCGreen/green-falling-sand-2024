@@ -64,12 +64,12 @@ public class Sand {
 
     public void randomSand(int n) {
         for (int i = 0; i < n; i++) {
-            int y, x;
+            int y;
+            int x;
             do {
                 y = random.nextInt(field.length);
                 x = random.nextInt(field[0].length);
-            }
-            while (field[y][x] == 1);
+            } while (field[y][x] == 1);
 
             field[y][x] = 1;
         }
