@@ -92,6 +92,17 @@ public class Sand {
         }
     }
 
+    public boolean isDoneFalling() {
+        for (int y = 0; y < field.length - 1; y++) {
+            for (int x = 0; x < field[y].length; x++) {
+                if (field[y][x] == 1 && field[y + 1][x] == 0) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();

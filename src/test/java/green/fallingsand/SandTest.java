@@ -151,5 +151,22 @@ class SandTest {
         assertEquals("000\n001\n011\n", sand.toString());
     }
 
+    @Test
+    public void fallAll() {
+        //given
+        Sand sand = new Sand(3, 3);
+        sand.put(2, 1);
+        sand.put(1, 0);
+        sand.put(2, 2);
+
+
+        //when
+        sand.fall();
+
+        //then
+        assertEquals(true, sand.isDoneFalling());
+
+    }
+
 
 }
