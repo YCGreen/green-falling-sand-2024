@@ -18,15 +18,20 @@ public class SandComponent extends JComponent {
         });
     }
 
+    public void resetCanvas() {
+        timer.stop();
+        sand.resetField();
+        repaint();
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
         int[][] sandField = sand.getField();
 
-        // int sandSize = 2;
         int sandSize = Math.min(getWidth() / sandField[0].length, getHeight() / sandField.length);
-        sandSize = Math.max(1, sandSize) * 2;
+        sandSize = Math.max(1, sandSize);
 
         g.setColor(new Color(0xCCAA00));
 

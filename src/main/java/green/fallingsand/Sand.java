@@ -3,11 +3,13 @@ package green.fallingsand;
 import java.util.Random;
 
 public class Sand {
-    private final int[][] field;
+    private int[][] field;
+    private int[][] origField; //for repainting sandComponent
     private Random random = new Random();
 
     public Sand(int width, int height) {
         field = new int[height][width];
+        origField = new int[height][width];
     }
 
     //for purposes of mockitoing
@@ -25,6 +27,14 @@ public class Sand {
 
     public int[][] getField() {
         return field;
+    }
+
+    public int[][] getOrigField() {
+        return origField;
+    }
+
+    public void resetField() {
+        field = origField;
     }
 
     /**
@@ -89,6 +99,7 @@ public class Sand {
             } while (field[y][x] == 1);
 
             field[y][x] = 1;
+            origField[y][x] = 1;
         }
     }
 
