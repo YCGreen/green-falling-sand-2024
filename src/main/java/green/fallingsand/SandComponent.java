@@ -16,6 +16,7 @@ public class SandComponent extends JComponent {
                 timer.stop();
             }
         });
+        timer.start();
     }
 
     @Override
@@ -38,7 +39,6 @@ public class SandComponent extends JComponent {
             }
         }
 
-        timer.start();
 
     }
 }

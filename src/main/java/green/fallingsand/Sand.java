@@ -1,9 +1,10 @@
 package green.fallingsand;
 
+import java.util.Arrays;
 import java.util.Random;
 
 public class Sand {
-    private final int[][] field;
+    private int[][] field;
     private Random random = new Random();
 
     public Sand(int width, int height) {
@@ -43,7 +44,7 @@ public class Sand {
 
                 if (field[y][x] == 1 && y + 1 < field.length) { //straight
                     if (field[y + 1][x] == 0) {
-                        fallDirection(y, x, 0);
+                        fallDirection(x, y, 0);
                         continue;
                     }
 
@@ -51,9 +52,9 @@ public class Sand {
                     int direction = rightFirst ? 1 : -1;
 
                     if (isSafeRight(x, y, direction)) { //right
-                        fallDirection(y, x, direction);
+                        fallDirection(x, y, direction);
                     } else if (isSafeLeft(x, y, direction)) { //left
-                        fallDirection(y, x, -direction);
+                        fallDirection(x, y, -direction);
                     }
 
                 }
@@ -71,16 +72,15 @@ public class Sand {
                 && field[y + 1][x - direction] == 0;
     }
 
-    private void fallDirection(int y, int x, int direction) {
+    private void fallDirection(int x, int y, int direction) {
         field[y + 1][x + direction] = 1;
         field[y][x] = 0;
     }
 
-    public void randomSand(int n) throws Exception {
-        if (n > field.length * field[0].length) {
-            throw new Exception("Sand to be added exceeds size of field");
-        }
-        for (int i = 0; i < n; i++) {
+    public void randomSand(int n) {
+        int num = Math.min(n, field.length * field[0].length);
+
+        for (int i = 0; i < num; i++) {
             int y;
             int x;
             do {
@@ -89,6 +89,31 @@ public class Sand {
             } while (field[y][x] == 1);
 
             field[y][x] = 1;
+        }
+    }
+
+    public void resize(int width, int height) {
+        int[][] newField = new int[height][width];
+        int minHeight = Math.min(field.length, newField.length);
+        int minWidth = Math.min(field[0].length, newField[0].length);
+
+        for (int y = 0; y < minHeight; y++) {
+            System.arraycopy(field[y], 0, newField[y], 0, minWidth);
+        }
+
+        field = newField;
+    }
+
+    public void put(int x, int y, int width, int height, double probability) {
+        int minHeight = Math.min(field.length, y + height);
+        int minWidth = Math.min(field[0].length, x + width);
+
+        for (int yPos = y; yPos < minHeight; yPos++) {
+            for (int xPos = x; xPos < minWidth; xPos++) {
+                if (random.nextDouble() <= probability) {
+                    put(xPos, yPos);
+                }
+            }
         }
     }
 
@@ -101,6 +126,44 @@ public class Sand {
             }
         }
         return true;
+    }
+
+    public void load(String sandString) {
+        clearField();
+
+        int strPos = 0;
+        int strRowLength = sandString.indexOf('\n');
+
+        int width = Math.min(strRowLength, field[0].length);
+        int height = Math.min(sandString.length() / strRowLength, field.length);
+
+        for (int y = 0; y <= height; y++) {
+            for (int x = 0; x <= width; x++) {
+                if (strOutOfBounds(sandString, strPos)) break;
+                char currentChar = sandString.charAt(strPos);
+                strPos++;
+
+                if (currentChar == '\n') {
+                    continue;
+                }
+
+                if (currentChar == '1') {
+                    put(x, y);
+                }
+
+
+            }
+        }
+    }
+
+    private static boolean strOutOfBounds(String sandString, int strPos) {
+        return strPos >= sandString.length();
+    }
+
+    private void clearField() {
+        for (int y = 0; y < field.length; y++) {
+            Arrays.fill(field[y], 0);
+        }
     }
 
     @Override
@@ -116,4 +179,5 @@ public class Sand {
 
         return builder.toString();
     }
+
 }

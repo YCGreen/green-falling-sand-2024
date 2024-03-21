@@ -13,12 +13,7 @@ public class SandFrame extends JFrame {
 
         setLayout(new BorderLayout());
 
-        try {
-            sand.randomSand(4000);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-
+        sand.randomSand(4000);
 
         SandComponent sandComponent = new SandComponent(sand);
         add(sandComponent, BorderLayout.CENTER);

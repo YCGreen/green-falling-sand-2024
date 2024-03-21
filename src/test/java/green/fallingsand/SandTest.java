@@ -159,12 +159,54 @@ class SandTest {
         sand.put(1, 0);
         sand.put(2, 2);
 
-
         //when
         sand.fall();
 
         //then
         assertEquals(true, sand.isDoneFalling());
+
+    }
+
+    @Test
+    public void resize() {
+        //given
+        Sand sand = new Sand(3, 3);
+
+        //when
+        sand.resize(4, 4);
+
+        //then
+        assertEquals("0000\n0000\n0000\n0000\n", sand.toString());
+
+    }
+
+    @Test
+    public void load() {
+        //given
+        Sand sand = new Sand(4, 3);
+        String sandString = "1110\n1001\n0000\n";
+
+        //when
+        sand.load(sandString);
+        String actualGridString = sand.toString();
+
+        //then
+        assertEquals(sandString, actualGridString);
+
+    }
+
+    @Test
+    public void putRandom() {
+        //given
+        Random random = mock();
+        doReturn(.5).when(random).nextDouble();
+        Sand sand = new Sand(6, 6);
+
+        //when
+        sand.put(3, 3, 2, 2, .5);
+
+        //then
+
 
     }
 
