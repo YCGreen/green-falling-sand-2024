@@ -73,28 +73,21 @@ public class SandComponent extends JComponent {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        int[][] sandField = sand.getField();
+        SandGrain[][] sandField = sand.getField();
 
         sandSize = Math.min(getWidth() / sandField[0].length, getHeight() / sandField.length);
         sandSize = Math.max(1, sandSize);
 
-        g.setColor(colors[colorIt]);
-
         for (int y = 0; y < sandField.length; y++) {
             for (int x = 0; x < sandField[y].length; x++) {
-                if (sandField[y][x] == 1) {
+                if (sandField[y][x].isVisible()) {
+                    g.setColor(colors[sandField[y][x].getColor()]);
                     g.fillOval(x * sandSize, y * sandSize, sandSize, sandSize);
                 }
             }
         }
         timer.start();
 
-    }
-
-    public void resetCanvas() {
-        timer.stop();
-        sand.resetField();
-        repaint();
     }
 
 }

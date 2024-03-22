@@ -1,40 +1,39 @@
 package green.fallingsand;
 
-import java.util.Arrays;
 import java.util.Random;
 
 public class Sand {
-    private int[][] field;
-    private int[][] origField; //for repainting sandComponent
+    private SandGrain[][] field;
     private Random random = new Random();
 
     public Sand(int width, int height) {
-        field = new int[height][width];
-        origField = new int[height][width];
+        field = new SandGrain[height][width];
+        initializeGrains(field);
     }
 
     //for purposes of mockitoing
     public Sand(int width, int height, Random random) {
-        field = new int[height][width];
+        field = new SandGrain[height][width];
         this.random = random;
+        initializeGrains(field);
     }
 
-    public int[][] getOrigField() {
-        return origField;
-    }
-
-    public void resetField() {
-        field = origField;
+    private void initializeGrains(SandGrain[][] someField) {
+        for (int y = 0; y < someField.length; y++) {
+            for (int x = 0; x < someField[y].length; x++) {
+                someField[y][x] = new SandGrain();
+            }
+        }
     }
 
     /**
      * @return the value in field
      */
-    public int getSand(int x, int y) {
+    public SandGrain getSand(int x, int y) {
         return field[y][x];
     }
 
-    public int[][] getField() {
+    public SandGrain[][] getField() {
         return field;
     }
 
@@ -42,7 +41,7 @@ public class Sand {
      * Sets the value in field to be 1
      */
     public void put(int x, int y) {
-        field[y][x] = 1;
+        field[y][x].turnVisible();
     }
 
     /**
@@ -52,8 +51,8 @@ public class Sand {
         for (int y = field.length - 2; y >= 0; y--) {
             for (int x = 0; x < field[y].length; x++) {
 
-                if (field[y][x] == 1 && y + 1 < field.length) { //straight
-                    if (field[y + 1][x] == 0) {
+                if (field[y][x].isVisible() && y + 1 < field.length) { //straight
+                    if (!field[y + 1][x].isVisible()) {
                         fallDirection(x, y, 0);
                         continue;
                     }
@@ -74,17 +73,17 @@ public class Sand {
 
     private boolean isSafeRight(int x, int y, int direction) {
         return 0 <= x + direction && x + direction < field[y + 1].length
-                && field[y + 1][x + direction] == 0;
+                && !field[y + 1][x + direction].isVisible();
     }
 
     private boolean isSafeLeft(int x, int y, int direction) {
         return x - direction >= 0 && x - direction < field[y + 1].length
-                && field[y + 1][x - direction] == 0;
+                && !field[y + 1][x - direction].isVisible();
     }
 
     private void fallDirection(int x, int y, int direction) {
-        field[y + 1][x + direction] = 1;
-        field[y][x] = 0;
+        field[y + 1][x + direction].turnVisible();
+        field[y][x].turnInvisible();
     }
 
     public void randomSand(int n) {
@@ -96,15 +95,15 @@ public class Sand {
             do {
                 y = random.nextInt(field.length);
                 x = random.nextInt(field[0].length);
-            } while (field[y][x] == 1);
+            } while (field[y][x].isVisible());
 
-            field[y][x] = 1;
-            origField[y][x] = 1;
+            field[y][x].turnVisible();
         }
     }
 
     public void resize(int width, int height) {
-        int[][] newField = new int[height][width];
+        SandGrain[][] newField = new SandGrain[height][width];
+        initializeGrains(newField);
         int minHeight = Math.min(field.length, newField.length);
         int minWidth = Math.min(field[0].length, newField[0].length);
 
@@ -131,7 +130,7 @@ public class Sand {
     public boolean isDoneFalling() {
         for (int y = 0; y < field.length - 1; y++) {
             for (int x = 0; x < field[y].length; x++) {
-                if (field[y][x] == 1 && field[y + 1][x] == 0) {
+                if (field[y][x].isVisible() && !field[y + 1][x].isVisible()) {
                     return false;
                 }
             }
@@ -173,7 +172,9 @@ public class Sand {
 
     private void clearField() {
         for (int y = 0; y < field.length; y++) {
-            Arrays.fill(field[y], 0);
+            for (int x = 0; x < field[y].length; x++) {
+                field[y][x].turnInvisible();
+            }
         }
     }
 
@@ -183,7 +184,8 @@ public class Sand {
 
         for (int y = 0; y < field.length; y++) {
             for (int x = 0; x < field[y].length; x++) {
-                builder.append(field[y][x]);
+                int sandNum = (field[y][x].isVisible()) ? 1 : 0;
+                builder.append(sandNum);
             }
             builder.append("\n");
         }
