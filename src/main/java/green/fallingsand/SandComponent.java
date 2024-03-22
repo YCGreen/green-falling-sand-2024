@@ -58,7 +58,7 @@ public class SandComponent extends JComponent {
         addMouseMotionListener(new MouseMotionListener() {
             @Override
             public void mouseDragged(MouseEvent e) {
-                sand.put(e.getX() / sandSize, e.getY() / sandSize);
+                sand.put(e.getX() / sandSize, e.getY() / sandSize, 5, 5, .2);
                 colorIt = rand.nextInt(colors.length);
             }
 
