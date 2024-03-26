@@ -37,7 +37,7 @@ public class Sand {
         }
     }
 
-    public void putColor(int x, int y, int color) {
+    public void putColor(int x, int y, MyColor color) {
         if (validCoords(x, y)) {
             field[y][x] = new SandGrain(color);
         }
@@ -113,18 +113,18 @@ public class Sand {
         }
     }
 
-    public void setColorsAcrossField(int[] colors) {
+    public void setColorsAcrossField() {
         int colorIt = 0;
-        int colorChangeFreq = field.length / colors.length;
+        int colorChangeFreq = field.length / MyColor.values().length;
 
         for (int y = 0; y < field.length; y++) {
             for (int x = 0; x < field[y].length; x++) {
                 if (isSandGrain(x, y)) {
-                    field[y][x].setColor(colorIt);
+                    field[y][x].setColor(MyColor.values()[colorIt]);
                 }
             }
             if (y % colorChangeFreq == 0) {
-                colorIt = changeColor(colorIt, colors);
+                colorIt = changeColor(colorIt);
             }
         }
     }
@@ -154,7 +154,7 @@ public class Sand {
         }
     }
 
-    public void putColor(int x, int y, int width, int height, double probability, int color) {
+    public void putColor(int x, int y, int width, int height, double probability, MyColor color) {
         int minHeight = Math.min(field.length, y + height);
         int minWidth = Math.min(field[0].length, x + width);
 
@@ -231,10 +231,10 @@ public class Sand {
         return builder.toString();
     }
 
-    private int changeColor(int colorIt, int[] colors) {
+    private int changeColor(int colorIt) {
         int nextColor = ++colorIt;
 
-        if (nextColor >= colors.length) {
+        if (nextColor >= MyColor.values().length) {
             nextColor = 0;
         }
 

@@ -11,14 +11,13 @@ public class SandComponent extends JComponent {
     private final Sand sand;
     private SandGrain[][] sandField;
     private Timer timer;
-    private final Color[] colors;
-    private int colorIt = 0;
     private int sandSize = 1;
     private final Random rand = new Random();
+    MyColor currColor = MyColor.values()[0];
 
     public SandComponent(Sand sand) {
         this.sand = sand;
-        sand.setColorsAcrossField(new int[]{0, 1, 2, 3});
+        sand.setColorsAcrossField();
         SandGrain[][] sandField = sand.getField();
 
         timer = new Timer(100, evt -> {
@@ -29,15 +28,12 @@ public class SandComponent extends JComponent {
             }
         });
 
-        colors = new Color[]{Color.MAGENTA, Color.BLUE, Color.GREEN, Color.YELLOW};
-
         addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 int x = e.getX() / sandSize;
                 int y = e.getY() / sandSize;
-                sand.putColor(x, y, colorIt);
-                colorIt = changeColor(colorIt);
+                sand.putColor(x, y, currColor);
                 repaint();
             }
 
@@ -67,8 +63,7 @@ public class SandComponent extends JComponent {
             public void mouseDragged(MouseEvent e) {
                 int x = e.getX() / sandSize;
                 int y = e.getY() / sandSize;
-                sand.putColor(x, y, 5, 5, .2, colorIt);
-                colorIt = changeColor(colorIt);
+                sand.putColor(x, y, 5, 5, .2, currColor);
                 repaint();
             }
 
@@ -90,7 +85,7 @@ public class SandComponent extends JComponent {
         for (int y = 0; y < sandField.length; y++) {
             for (int x = 0; x < sandField[y].length; x++) {
                 if (sand.isSandGrain(x, y)) {
-                    g.setColor(colors[sandField[y][x].getColor()]);
+                    g.setColor(sandField[y][x].getColor());
                     g.fillOval(x * sandSize, y * sandSize, sandSize, sandSize);
                 }
             }
@@ -99,14 +94,8 @@ public class SandComponent extends JComponent {
 
     }
 
-    private int changeColor(int colorIt) {
-        int nextColor = ++colorIt;
-
-        if (nextColor >= colors.length) {
-            nextColor = 0;
-        }
-
-        return nextColor;
+    public void setColor(MyColor color) {
+        currColor = color;
     }
 
 }

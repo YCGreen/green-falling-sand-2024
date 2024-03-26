@@ -2,6 +2,8 @@ package green.fallingsand;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class SandFrame extends JFrame {
     private final Sand sand = new Sand(90, 90);
@@ -35,6 +37,35 @@ public class SandFrame extends JFrame {
 
         JButton greenButton = new JButton("Green");
         buttonPanel.add(greenButton);
+
+        pinkButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                sandComponent.setColor(MyColor.PINK);
+            }
+        });
+
+        blueButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                sandComponent.setColor(MyColor.BLUE);
+            }
+        });
+
+        yellowButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                sandComponent.setColor(MyColor.YELLOW);
+            }
+        });
+
+        greenButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                sandComponent.setColor(MyColor.GREEN);
+            }
+        });
+
 
     }
 
