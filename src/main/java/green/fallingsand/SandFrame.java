@@ -2,11 +2,8 @@ package green.fallingsand;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class SandFrame extends JFrame {
-    private final Sand sand = new Sand(90, 90);
 
     public SandFrame() {
         setSize(800, 600);
@@ -21,7 +18,8 @@ public class SandFrame extends JFrame {
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
         sandPanel.add(buttonPanel, BorderLayout.EAST);
 
-        sand.randomSand(400);
+        Sand sand = new Sand(90, 90);
+        sand.randomSand(600);
 
         SandComponent sandComponent = new SandComponent(sand);
         sandPanel.add(sandComponent, BorderLayout.CENTER);
@@ -38,35 +36,23 @@ public class SandFrame extends JFrame {
         JButton greenButton = new JButton("Green");
         buttonPanel.add(greenButton);
 
-        pinkButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent evt) {
-                sandComponent.setColor(MyColor.PINK);
-            }
-        });
+        JButton resetButton = new JButton("Reset");
+        buttonPanel.add(resetButton);
 
-        blueButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent evt) {
-                sandComponent.setColor(MyColor.BLUE);
-            }
-        });
+        JButton repopulateButton = new JButton("Repopulate");
+        buttonPanel.add(repopulateButton);
 
-        yellowButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent evt) {
-                sandComponent.setColor(MyColor.YELLOW);
-            }
-        });
+        pinkButton.addActionListener(evt -> sandComponent.setColor(MyColor.PINK));
 
-        greenButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent evt) {
-                sandComponent.setColor(MyColor.GREEN);
-            }
-        });
+        blueButton.addActionListener(evt -> sandComponent.setColor(MyColor.BLUE));
 
+        yellowButton.addActionListener(evt -> sandComponent.setColor(MyColor.YELLOW));
 
+        greenButton.addActionListener(evt -> sandComponent.setColor(MyColor.GREEN));
+
+        resetButton.addActionListener(evt -> sand.clearField());
+
+        repopulateButton.addActionListener(evt -> sand.randomSand(500));
     }
 
 }

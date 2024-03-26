@@ -5,22 +5,17 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.util.Random;
 
 public class SandComponent extends JComponent {
     private final Sand sand;
-    private SandGrain[][] sandField;
     private Timer timer;
     private int sandSize = 1;
-    private final Random rand = new Random();
     MyColor currColor = MyColor.values()[0];
 
     public SandComponent(Sand sand) {
         this.sand = sand;
-        sand.setColorsAcrossField();
-        SandGrain[][] sandField = sand.getField();
 
-        timer = new Timer(100, evt -> {
+        timer = new Timer(10, evt -> {
             sand.fall();
             repaint();
             if (sand.isDoneFalling()) {

@@ -111,6 +111,7 @@ public class Sand {
 
             put(x, y);
         }
+        setColorsAcrossField();
     }
 
     public void setColorsAcrossField() {
@@ -210,7 +211,7 @@ public class Sand {
         return strPos >= sandString.length();
     }
 
-    private void clearField() {
+    public void clearField() {
         for (int y = 0; y < field.length; y++) {
             Arrays.fill(field[y], null);
         }
