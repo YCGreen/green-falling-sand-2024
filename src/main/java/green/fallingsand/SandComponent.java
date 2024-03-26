@@ -18,6 +18,7 @@ public class SandComponent extends JComponent {
 
     public SandComponent(Sand sand) {
         this.sand = sand;
+        sand.setColorsAcrossField(new int[]{0, 1, 2, 3});
         SandGrain[][] sandField = sand.getField();
 
         timer = new Timer(100, evt -> {
@@ -35,10 +36,8 @@ public class SandComponent extends JComponent {
             public void mouseClicked(MouseEvent e) {
                 int x = e.getX() / sandSize;
                 int y = e.getY() / sandSize;
-                sand.put(x, y);
-                sandField[y][x].setColor(colorIt);
+                sand.putColor(x, y, colorIt);
                 colorIt = changeColor(colorIt);
-                //  colorIt = rand.nextInt(colors.length);
                 repaint();
             }
 
@@ -68,10 +67,8 @@ public class SandComponent extends JComponent {
             public void mouseDragged(MouseEvent e) {
                 int x = e.getX() / sandSize;
                 int y = e.getY() / sandSize;
-                sand.put(x, y, 5, 5, .2);
-                sandField[y][x].setColor(colorIt);
+                sand.putColor(x, y, 5, 5, .2, colorIt);
                 colorIt = changeColor(colorIt);
-                //  colorIt = rand.nextInt(colors.length);
                 repaint();
             }
 

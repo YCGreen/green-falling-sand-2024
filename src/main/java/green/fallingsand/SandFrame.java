@@ -11,13 +11,30 @@ public class SandFrame extends JFrame {
         setTitle("Falling Sand");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        setLayout(new BorderLayout());
+        JPanel sandPanel = new JPanel();
+        sandPanel.setLayout(new BorderLayout());
+        setContentPane(sandPanel);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+        sandPanel.add(buttonPanel, BorderLayout.EAST);
 
         sand.randomSand(400);
 
         SandComponent sandComponent = new SandComponent(sand);
-        add(sandComponent, BorderLayout.CENTER);
+        sandPanel.add(sandComponent, BorderLayout.CENTER);
 
+        JButton pinkButton = new JButton("Pink");
+        buttonPanel.add(pinkButton);
+
+        JButton blueButton = new JButton("Blue");
+        buttonPanel.add(blueButton);
+
+        JButton yellowButton = new JButton("Yellow");
+        buttonPanel.add(yellowButton);
+
+        JButton greenButton = new JButton("Green");
+        buttonPanel.add(greenButton);
 
     }
 

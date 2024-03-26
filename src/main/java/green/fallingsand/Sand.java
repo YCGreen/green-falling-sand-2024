@@ -37,6 +37,12 @@ public class Sand {
         }
     }
 
+    public void putColor(int x, int y, int color) {
+        if (validCoords(x, y)) {
+            field[y][x] = new SandGrain(color);
+        }
+    }
+
     private boolean validCoords(int x, int y) {
         return y >= 0 && y < field.length
                 && x >= 0 && x < field[0].length;
@@ -92,14 +98,6 @@ public class Sand {
         }
     }
 
-
-    //new method
-    //while x y of sand grain is in field
-    //save sand grain above it
-    //make first sand grain fall
-    //sand grain = sand grain above
-
-
     public void randomSand(int n) {
         int num = Math.min(n, field.length * field[0].length);
 
@@ -111,7 +109,23 @@ public class Sand {
                 x = random.nextInt(field[0].length);
             } while (isSandGrain(x, y));
 
-            field[y][x] = new SandGrain();
+            put(x, y);
+        }
+    }
+
+    public void setColorsAcrossField(int[] colors) {
+        int colorIt = 0;
+        int colorChangeFreq = field.length / colors.length;
+
+        for (int y = 0; y < field.length; y++) {
+            for (int x = 0; x < field[y].length; x++) {
+                if (isSandGrain(x, y)) {
+                    field[y][x].setColor(colorIt);
+                }
+            }
+            if (y % colorChangeFreq == 0) {
+                colorIt = changeColor(colorIt, colors);
+            }
         }
     }
 
@@ -135,6 +149,19 @@ public class Sand {
             for (int xPos = x; xPos < minWidth; xPos++) {
                 if (random.nextDouble() <= probability) {
                     put(xPos, yPos);
+                }
+            }
+        }
+    }
+
+    public void putColor(int x, int y, int width, int height, double probability, int color) {
+        int minHeight = Math.min(field.length, y + height);
+        int minWidth = Math.min(field[0].length, x + width);
+
+        for (int yPos = y; yPos < minHeight; yPos++) {
+            for (int xPos = x; xPos < minWidth; xPos++) {
+                if (random.nextDouble() <= probability) {
+                    putColor(xPos, yPos, color);
                 }
             }
         }
@@ -202,6 +229,16 @@ public class Sand {
         }
 
         return builder.toString();
+    }
+
+    private int changeColor(int colorIt, int[] colors) {
+        int nextColor = ++colorIt;
+
+        if (nextColor >= colors.length) {
+            nextColor = 0;
+        }
+
+        return nextColor;
     }
 
 }

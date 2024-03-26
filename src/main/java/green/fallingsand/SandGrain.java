@@ -7,7 +7,11 @@ public class SandGrain {
     Random rand = new Random();
 
     public SandGrain() {
-        //  color = rand.nextInt(0, 4);
+        color = rand.nextInt(0, 4);
+    }
+
+    public SandGrain(int color) {
+        this.color = color;
     }
 
     public void setColor(int color) {
