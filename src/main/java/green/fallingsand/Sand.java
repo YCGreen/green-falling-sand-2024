@@ -1,5 +1,6 @@
 package green.fallingsand;
 
+import java.util.Arrays;
 import java.util.Random;
 
 public class Sand {
@@ -8,22 +9,12 @@ public class Sand {
 
     public Sand(int width, int height) {
         field = new SandGrain[height][width];
-        initializeGrains(field);
     }
 
     //for purposes of mockitoing
     public Sand(int width, int height, Random random) {
         field = new SandGrain[height][width];
         this.random = random;
-        initializeGrains(field);
-    }
-
-    private void initializeGrains(SandGrain[][] someField) {
-        for (int y = 0; y < someField.length; y++) {
-            for (int x = 0; x < someField[y].length; x++) {
-                someField[y][x] = new SandGrain();
-            }
-        }
     }
 
     /**
@@ -41,18 +32,48 @@ public class Sand {
      * Sets the value in field to be 1
      */
     public void put(int x, int y) {
-        field[y][x].turnVisible();
+        if (validCoords(x, y)) {
+            field[y][x] = new SandGrain();
+        }
+    }
+
+    private boolean validCoords(int x, int y) {
+        return y >= 0 && y < field.length
+                && x >= 0 && x < field[0].length;
+    }
+
+    public boolean isSandGrain(int x, int y) {
+        if (validCoords(x, y)) {
+            return field[y][x] != null;
+        }
+        return false;
     }
 
     /**
      * Moves all sand down one square
      */
+
+    private boolean isSafeRight(int x, int y, int direction) {
+        return 0 <= x + direction && x + direction < field[y + 1].length
+                && !isSandGrain(x + direction, y + 1);
+    }
+
+    private boolean isSafeLeft(int x, int y, int direction) {
+        return x - direction >= 0 && x - direction < field[y + 1].length
+                && !isSandGrain(x - direction, y + 1);
+    }
+
+    private void fallDirection(int x, int y, int direction) {
+        field[y + 1][x + direction] = field[y][x];
+        field[y][x] = null;
+    }
+
     public void fall() {
         for (int y = field.length - 2; y >= 0; y--) {
             for (int x = 0; x < field[y].length; x++) {
 
-                if (field[y][x].isVisible() && y + 1 < field.length) { //straight
-                    if (!field[y + 1][x].isVisible()) {
+                if (isSandGrain(x, y) && y + 1 < field.length) { //straight
+                    if (!isSandGrain(x, y + 1)) {
                         fallDirection(x, y, 0);
                         continue;
                     }
@@ -71,20 +92,13 @@ public class Sand {
         }
     }
 
-    private boolean isSafeRight(int x, int y, int direction) {
-        return 0 <= x + direction && x + direction < field[y + 1].length
-                && !field[y + 1][x + direction].isVisible();
-    }
 
-    private boolean isSafeLeft(int x, int y, int direction) {
-        return x - direction >= 0 && x - direction < field[y + 1].length
-                && !field[y + 1][x - direction].isVisible();
-    }
+    //new method
+    //while x y of sand grain is in field
+    //save sand grain above it
+    //make first sand grain fall
+    //sand grain = sand grain above
 
-    private void fallDirection(int x, int y, int direction) {
-        field[y + 1][x + direction].turnVisible();
-        field[y][x].turnInvisible();
-    }
 
     public void randomSand(int n) {
         int num = Math.min(n, field.length * field[0].length);
@@ -95,15 +109,14 @@ public class Sand {
             do {
                 y = random.nextInt(field.length);
                 x = random.nextInt(field[0].length);
-            } while (field[y][x].isVisible());
+            } while (isSandGrain(x, y));
 
-            field[y][x].turnVisible();
+            field[y][x] = new SandGrain();
         }
     }
 
     public void resize(int width, int height) {
         SandGrain[][] newField = new SandGrain[height][width];
-        initializeGrains(newField);
         int minHeight = Math.min(field.length, newField.length);
         int minWidth = Math.min(field[0].length, newField[0].length);
 
@@ -130,7 +143,7 @@ public class Sand {
     public boolean isDoneFalling() {
         for (int y = 0; y < field.length - 1; y++) {
             for (int x = 0; x < field[y].length; x++) {
-                if (field[y][x].isVisible() && !field[y + 1][x].isVisible()) {
+                if (isSandGrain(x, y) && !isSandGrain(x, y + 1)) {
                     return false;
                 }
             }
@@ -172,9 +185,7 @@ public class Sand {
 
     private void clearField() {
         for (int y = 0; y < field.length; y++) {
-            for (int x = 0; x < field[y].length; x++) {
-                field[y][x].turnInvisible();
-            }
+            Arrays.fill(field[y], null);
         }
     }
 
@@ -184,7 +195,7 @@ public class Sand {
 
         for (int y = 0; y < field.length; y++) {
             for (int x = 0; x < field[y].length; x++) {
-                int sandNum = (field[y][x].isVisible()) ? 1 : 0;
+                int sandNum = (isSandGrain(x, y)) ? 1 : 0;
                 builder.append(sandNum);
             }
             builder.append("\n");

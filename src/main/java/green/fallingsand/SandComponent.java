@@ -9,6 +9,7 @@ import java.util.Random;
 
 public class SandComponent extends JComponent {
     private final Sand sand;
+    private SandGrain[][] sandField;
     private Timer timer;
     private final Color[] colors;
     private int colorIt = 0;
@@ -17,6 +18,8 @@ public class SandComponent extends JComponent {
 
     public SandComponent(Sand sand) {
         this.sand = sand;
+        SandGrain[][] sandField = sand.getField();
+
         timer = new Timer(100, evt -> {
             sand.fall();
             repaint();
@@ -30,8 +33,13 @@ public class SandComponent extends JComponent {
         addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                sand.put(e.getX() / sandSize, e.getY() / sandSize);
-                colorIt = rand.nextInt(colors.length);
+                int x = e.getX() / sandSize;
+                int y = e.getY() / sandSize;
+                sand.put(x, y);
+                sandField[y][x].setColor(colorIt);
+                colorIt = changeColor(colorIt);
+                //  colorIt = rand.nextInt(colors.length);
+                repaint();
             }
 
             @Override
@@ -58,8 +66,13 @@ public class SandComponent extends JComponent {
         addMouseMotionListener(new MouseMotionListener() {
             @Override
             public void mouseDragged(MouseEvent e) {
-                sand.put(e.getX() / sandSize, e.getY() / sandSize, 5, 5, .2);
-                colorIt = rand.nextInt(colors.length);
+                int x = e.getX() / sandSize;
+                int y = e.getY() / sandSize;
+                sand.put(x, y, 5, 5, .2);
+                sandField[y][x].setColor(colorIt);
+                colorIt = changeColor(colorIt);
+                //  colorIt = rand.nextInt(colors.length);
+                repaint();
             }
 
             @Override
@@ -71,16 +84,15 @@ public class SandComponent extends JComponent {
 
     @Override
     protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-
         SandGrain[][] sandField = sand.getField();
+        super.paintComponent(g);
 
         sandSize = Math.min(getWidth() / sandField[0].length, getHeight() / sandField.length);
         sandSize = Math.max(1, sandSize);
 
         for (int y = 0; y < sandField.length; y++) {
             for (int x = 0; x < sandField[y].length; x++) {
-                if (sandField[y][x].isVisible()) {
+                if (sand.isSandGrain(x, y)) {
                     g.setColor(colors[sandField[y][x].getColor()]);
                     g.fillOval(x * sandSize, y * sandSize, sandSize, sandSize);
                 }
@@ -88,6 +100,16 @@ public class SandComponent extends JComponent {
         }
         timer.start();
 
+    }
+
+    private int changeColor(int colorIt) {
+        int nextColor = ++colorIt;
+
+        if (nextColor >= colors.length) {
+            nextColor = 0;
+        }
+
+        return nextColor;
     }
 
 }
