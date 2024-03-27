@@ -1,25 +1,24 @@
 package green.fallingsand;
 
-import java.awt.*;
 import java.util.Random;
 
 public class SandGrain {
-    public MyColor color;
-    Random rand = new Random();
+    public Color color;
+    private static final Random rand = new Random();
 
     public SandGrain() {
-        color = MyColor.values()[rand.nextInt(0, MyColor.values().length)];
+        color = Color.values()[rand.nextInt(0, Color.values().length)];
     }
 
-    public SandGrain(MyColor color) {
+    public SandGrain(Color color) {
         this.color = color;
     }
 
-    public void setColor(MyColor color) {
+    public void setColor(Color color) {
         this.color = color;
     }
 
-    public Color getColor() {
+    public java.awt.Color getColor() {
         return color.getColor();
     }
 

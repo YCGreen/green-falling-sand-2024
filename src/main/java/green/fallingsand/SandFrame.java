@@ -42,13 +42,13 @@ public class SandFrame extends JFrame {
         JButton repopulateButton = new JButton("Repopulate");
         buttonPanel.add(repopulateButton);
 
-        pinkButton.addActionListener(evt -> sandComponent.setColor(MyColor.PINK));
+        pinkButton.addActionListener(evt -> sandComponent.setColor(Color.PINK));
 
-        blueButton.addActionListener(evt -> sandComponent.setColor(MyColor.BLUE));
+        blueButton.addActionListener(evt -> sandComponent.setColor(Color.BLUE));
 
-        yellowButton.addActionListener(evt -> sandComponent.setColor(MyColor.YELLOW));
+        yellowButton.addActionListener(evt -> sandComponent.setColor(Color.YELLOW));
 
-        greenButton.addActionListener(evt -> sandComponent.setColor(MyColor.GREEN));
+        greenButton.addActionListener(evt -> sandComponent.setColor(Color.GREEN));
 
         resetButton.addActionListener(evt -> sand.clearField());
 

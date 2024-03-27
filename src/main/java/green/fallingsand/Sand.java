@@ -50,13 +50,13 @@ public class Sand {
         }
     }
 
-    public void putColor(int x, int y, MyColor color) {
+    public void putColor(int x, int y, Color color) {
         if (isValidCoords(x, y)) {
             field[y][x] = new SandGrain(color);
         }
     }
 
-    public void putColor(int x, int y, int width, int height, double probability, MyColor color) {
+    public void putColor(int x, int y, int width, int height, double probability, Color color) {
         int minHeight = Math.min(field.length, y + height);
         int minWidth = Math.min(field[0].length, x + width);
 
@@ -141,12 +141,12 @@ public class Sand {
 
     public void setColorsAcrossField() {
         int colorIt = 0;
-        int colorChangeFreq = field.length / MyColor.values().length;
+        int colorChangeFreq = field.length / Color.values().length;
 
         for (int y = 0; y < field.length; y++) {
             for (int x = 0; x < field[y].length; x++) {
                 if (isSandGrain(x, y)) {
-                    field[y][x].setColor(MyColor.values()[colorIt]);
+                    field[y][x].setColor(Color.values()[colorIt]);
                 }
             }
             if (y % colorChangeFreq == 0) {
@@ -193,18 +193,16 @@ public class Sand {
                 if (strOutOfBounds(sandString, strPos)) {
                     break;
                 }
-                char currentChar = sandString.charAt(strPos);
+
+                switch (sandString.charAt(strPos)) {
+                    case '\n':
+                        break;
+                    case '1':
+                        put(x, y);
+                        break;
+                }
+
                 strPos++;
-
-                if (currentChar == '\n') {
-                    continue;
-                }
-
-                if (currentChar == '1') {
-                    put(x, y);
-                }
-
-
             }
         }
     }
@@ -217,6 +215,16 @@ public class Sand {
         for (int y = 0; y < field.length; y++) {
             Arrays.fill(field[y], null);
         }
+    }
+
+    private int changeColor(int colorIt) {
+        int nextColor = ++colorIt;
+
+        if (nextColor >= Color.values().length) {
+            nextColor = 0;
+        }
+
+        return nextColor;
     }
 
     @Override
@@ -233,15 +241,4 @@ public class Sand {
 
         return builder.toString();
     }
-
-    private int changeColor(int colorIt) {
-        int nextColor = ++colorIt;
-
-        if (nextColor >= MyColor.values().length) {
-            nextColor = 0;
-        }
-
-        return nextColor;
-    }
-
 }

@@ -10,7 +10,7 @@ public class SandComponent extends JComponent {
     private final Sand sand;
     private Timer timer;
     private int sandSize = 1;
-    MyColor currColor = MyColor.values()[0];
+    Color currColor = Color.values()[0];
 
     public SandComponent(Sand sand) {
         this.sand = sand;
@@ -89,7 +89,7 @@ public class SandComponent extends JComponent {
 
     }
 
-    public void setColor(MyColor color) {
+    public void setColor(Color color) {
         currColor = color;
     }
 
