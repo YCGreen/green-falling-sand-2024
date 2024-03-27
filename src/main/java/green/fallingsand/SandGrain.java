@@ -8,7 +8,7 @@ public class SandGrain {
     Random rand = new Random();
 
     public SandGrain() {
-        color = MyColor.values()[rand.nextInt(0, 4)];
+        color = MyColor.values()[rand.nextInt(0, MyColor.values().length)];
     }
 
     public SandGrain(MyColor color) {

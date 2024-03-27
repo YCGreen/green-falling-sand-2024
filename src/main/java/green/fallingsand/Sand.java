@@ -32,24 +32,50 @@ public class Sand {
      * Sets the value in field to be 1
      */
     public void put(int x, int y) {
-        if (validCoords(x, y)) {
+        if (isValidCoords(x, y)) {
             field[y][x] = new SandGrain();
         }
     }
 
+    public void put(int x, int y, int width, int height, double probability) {
+        int minHeight = Math.min(field.length, y + height);
+        int minWidth = Math.min(field[0].length, x + width);
+
+        for (int yPos = y; yPos < minHeight; yPos++) {
+            for (int xPos = x; xPos < minWidth; xPos++) {
+                if (random.nextDouble() <= probability) {
+                    put(xPos, yPos);
+                }
+            }
+        }
+    }
+
     public void putColor(int x, int y, MyColor color) {
-        if (validCoords(x, y)) {
+        if (isValidCoords(x, y)) {
             field[y][x] = new SandGrain(color);
         }
     }
 
-    private boolean validCoords(int x, int y) {
+    public void putColor(int x, int y, int width, int height, double probability, MyColor color) {
+        int minHeight = Math.min(field.length, y + height);
+        int minWidth = Math.min(field[0].length, x + width);
+
+        for (int yPos = y; yPos < minHeight; yPos++) {
+            for (int xPos = x; xPos < minWidth; xPos++) {
+                if (random.nextDouble() <= probability) {
+                    putColor(xPos, yPos, color);
+                }
+            }
+        }
+    }
+
+    private boolean isValidCoords(int x, int y) {
         return y >= 0 && y < field.length
                 && x >= 0 && x < field[0].length;
     }
 
     public boolean isSandGrain(int x, int y) {
-        if (validCoords(x, y)) {
+        if (isValidCoords(x, y)) {
             return field[y][x] != null;
         }
         return false;
@@ -58,22 +84,6 @@ public class Sand {
     /**
      * Moves all sand down one square
      */
-
-    private boolean isSafeRight(int x, int y, int direction) {
-        return 0 <= x + direction && x + direction < field[y + 1].length
-                && !isSandGrain(x + direction, y + 1);
-    }
-
-    private boolean isSafeLeft(int x, int y, int direction) {
-        return x - direction >= 0 && x - direction < field[y + 1].length
-                && !isSandGrain(x - direction, y + 1);
-    }
-
-    private void fallDirection(int x, int y, int direction) {
-        field[y + 1][x + direction] = field[y][x];
-        field[y][x] = null;
-    }
-
     public void fall() {
         for (int y = field.length - 2; y >= 0; y--) {
             for (int x = 0; x < field[y].length; x++) {
@@ -96,6 +106,21 @@ public class Sand {
                 }
             }
         }
+    }
+
+    private boolean isSafeRight(int x, int y, int direction) {
+        return 0 <= x + direction && x + direction < field[y + 1].length
+                && !isSandGrain(x + direction, y + 1);
+    }
+
+    private boolean isSafeLeft(int x, int y, int direction) {
+        return x - direction >= 0 && x - direction < field[y + 1].length
+                && !isSandGrain(x - direction, y + 1);
+    }
+
+    private void fallDirection(int x, int y, int direction) {
+        field[y + 1][x + direction] = field[y][x];
+        field[y][x] = null;
     }
 
     public void randomSand(int n) {
@@ -142,31 +167,6 @@ public class Sand {
         field = newField;
     }
 
-    public void put(int x, int y, int width, int height, double probability) {
-        int minHeight = Math.min(field.length, y + height);
-        int minWidth = Math.min(field[0].length, x + width);
-
-        for (int yPos = y; yPos < minHeight; yPos++) {
-            for (int xPos = x; xPos < minWidth; xPos++) {
-                if (random.nextDouble() <= probability) {
-                    put(xPos, yPos);
-                }
-            }
-        }
-    }
-
-    public void putColor(int x, int y, int width, int height, double probability, MyColor color) {
-        int minHeight = Math.min(field.length, y + height);
-        int minWidth = Math.min(field[0].length, x + width);
-
-        for (int yPos = y; yPos < minHeight; yPos++) {
-            for (int xPos = x; xPos < minWidth; xPos++) {
-                if (random.nextDouble() <= probability) {
-                    putColor(xPos, yPos, color);
-                }
-            }
-        }
-    }
 
     public boolean isDoneFalling() {
         for (int y = 0; y < field.length - 1; y++) {
@@ -190,7 +190,9 @@ public class Sand {
 
         for (int y = 0; y <= height; y++) {
             for (int x = 0; x <= width; x++) {
-                if (strOutOfBounds(sandString, strPos)) break;
+                if (strOutOfBounds(sandString, strPos)) {
+                    break;
+                }
                 char currentChar = sandString.charAt(strPos);
                 strPos++;
 
