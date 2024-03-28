@@ -65,9 +65,7 @@ class SandTest {
     public void fallToTheRight() {
         // given
         Sand sand = new Sand(3, 3);
-        sand.put(1, 1);
-        sand.put(1, 2);
-        sand.put(0, 2);
+        sand.load("000\n000\n111\n");
 
         // when
         sand.fall();

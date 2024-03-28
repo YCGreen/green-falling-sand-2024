@@ -194,12 +194,8 @@ public class Sand {
                     break;
                 }
 
-                switch (sandString.charAt(strPos)) {
-                    case '\n':
-                        break;
-                    case '1':
-                        put(x, y);
-                        break;
+                if (sandString.charAt(strPos) == '1') {
+                    put(x, y);
                 }
 
                 strPos++;
